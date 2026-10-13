@@ -27,3 +27,10 @@ ami_name         = "al2023-ami-2023.*-x86_64"
 ami_owner        = "amazon"
 ami_architecture = "x86_64"
 ami_state        = "available"
+
+
+
+launch_template_name   = "cmtr-n9nbj5cz-template"
+autoscaling_group_name = "cmtr-n9nbj5cz-asg"
+load_balancer_name     = "cmtr-n9nbj5cz-loadbalancer"
+target_group_name      = "cmtr-n9nbj5cz-tg"

@@ -104,3 +104,24 @@ variable "ami_state" {
   description = "State of the AMI to use for the EC2 instances."
   type        = string
 }
+
+variable "launch_template_name" {
+  description = "Name of the Launch Template for the application."
+  type        = string
+
+}
+variable "autoscaling_group_name" {
+  description = "Name of the Auto Scaling Group for the application."
+  type        = string
+
+}
+
+variable "load_balancer_name" {
+  description = "Name of the Application Load Balancer."
+  type        = string
+}
+
+variable "target_group_name" {
+  description = "Name of the target group for the application."
+  type        = string
+}

@@ -1,10 +1,5 @@
 
 locals {
-  launch_template_name   = "${var.project_id}-template"
-  autoscaling_group_name = "${var.project_id}-asg"
-  load_balancer_name     = "${var.project_id}-loadbalancer"
-  target_group_name      = "${var.project_id}-tg"
-
   common_tags = {
     Terraform = "true"
     Project   = var.project_id
@@ -132,7 +127,7 @@ data "aws_ami" "amazon_linux_2023" {
 
 
 resource "aws_launch_template" "application" {
-  name          = local.launch_template_name
+  name          = var.launch_template_name
   image_id      = data.aws_ami.amazon_linux_2023.id
   instance_type = var.instance_type
   key_name      = data.aws_key_pair.existing.key_name
@@ -206,7 +201,7 @@ EOF
   }
 
   tags = merge(local.common_tags, {
-    Name = local.launch_template_name
+    Name = var.launch_template_name
   })
 }
 
@@ -214,7 +209,7 @@ EOF
 
 
 resource "aws_lb" "application" {
-  name               = local.load_balancer_name
+  name               = var.load_balancer_name
   internal           = false
   load_balancer_type = "application"
 
@@ -228,12 +223,12 @@ resource "aws_lb" "application" {
   ]
 
   tags = merge(local.common_tags, {
-    Name = local.load_balancer_name
+    Name = var.load_balancer_name
   })
 }
 
 resource "aws_lb_target_group" "application" {
-  name     = local.target_group_name
+  name     = var.target_group_name
   port     = var.http_port
   protocol = "HTTP"
   vpc_id   = data.aws_vpc.existing.id
@@ -251,7 +246,7 @@ resource "aws_lb_target_group" "application" {
   }
 
   tags = merge(local.common_tags, {
-    Name = local.target_group_name
+    Name = var.target_group_name
   })
 }
 
@@ -271,7 +266,7 @@ resource "aws_lb_listener" "http" {
 
 
 resource "aws_autoscaling_group" "application" {
-  name             = local.autoscaling_group_name
+  name             = var.autoscaling_group_name
   min_size         = var.min_size
   max_size         = var.max_size
   desired_capacity = var.desired_capacity
@@ -298,7 +293,7 @@ resource "aws_autoscaling_group" "application" {
 
   dynamic "tag" {
     for_each = merge(local.common_tags, {
-      Name = local.autoscaling_group_name
+      Name = var.autoscaling_group_name
     })
 
     content {
